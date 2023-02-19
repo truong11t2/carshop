@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource
+@RepositoryRestResource(path = "cars")
 //public interface CarRepository extends CrudRepository <CarEntity, Long> {
 //public interface CarRepository extends PagingAndSortingRepository <CarEntity, Long> {
 public interface CarRepository extends JpaRepository<CarEntity, Long> {
