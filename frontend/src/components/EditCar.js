@@ -12,7 +12,7 @@ function EditCar(props) {
     const handleClickOpen = () => {
         setCar({
             brand: props.data.row.brand,
-            model: props.data.model,
+            model: props.data.row.model,
             color: props.data.row.color,
             year: props.data.row.year,
             price: props.data.row.price

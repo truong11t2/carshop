@@ -42,7 +42,11 @@ function Carlist() {
 
     const onDelClick = (url) => {
         if(window.confirm("Are your sure to delete?")) {
-            fetch(url, {method: 'DELETE'})
+            fetch(url,
+            {
+                method: 'DELETE',
+                headers: {'Authorization' : token}
+            })
             .then(response => {
                 if(response.ok) {
                     fetchCars();
@@ -55,8 +59,16 @@ function Carlist() {
         }
     }
 
+    const token = sessionStorage.getItem("jwt");
+    
     const fetchCars = () => {
-        fetch(SERVER_URL + 'api/cars')
+        //Read the token from the session storage
+        //and include it to Authorization header
+        const token = sessionStorage.getItem("jwt");
+
+        fetch(SERVER_URL + 'api/cars', {
+            headers: {'Authorization' : token}
+        })
         .then(response => response.json())
         .then(data => setCars(data._embedded.carEntities))
         .catch(err => console.error(err));
@@ -71,7 +83,8 @@ function Carlist() {
         fetch(SERVER_URL + 'api/cars',
         {
             method: 'POST',
-            headers: { 'Content-Type':'application/json' },
+            headers: { 'Content-Type':'application/json',
+            'Authorization' : token },
             body: JSON.stringify(car)
         })
         .then(response => {
@@ -89,7 +102,8 @@ function Carlist() {
         fetch(link,
             {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                'Authorization' : token },
                 body: JSON.stringify(car)
             })
             .then(response => {

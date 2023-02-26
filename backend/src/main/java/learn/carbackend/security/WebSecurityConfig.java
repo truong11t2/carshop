@@ -82,9 +82,13 @@ public class WebSecurityConfig {
         .authorizeRequests()
         .antMatchers("/auth/signup/**").permitAll()
         .antMatchers("/auth/signin/**").permitAll()
-        //.antMatchers("/api/**").hasRole("ADMIN")
-        .antMatchers("/api/**").permitAll();
-        //.antMatchers("/api/**").authenticated();
+
+        .antMatchers("/api/all/**").permitAll()
+        .antMatchers("/api/user/**").hasAnyRole("ADMIN", "USER", "MODERATOR")
+        .antMatchers("/api/mod/**").hasRole("MODERATOR")
+        .antMatchers("/api/**").hasRole("ADMIN")
+        
+        .anyRequest().authenticated();
 
         httpSecurity.authenticationProvider(authenticationProvider());
         httpSecurity.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
