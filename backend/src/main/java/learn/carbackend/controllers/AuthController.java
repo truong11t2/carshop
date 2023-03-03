@@ -1,10 +1,10 @@
 package learn.carbackend.controllers;
 
 import java.util.HashSet;
-//import java.util.List;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-//import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -29,9 +29,9 @@ import learn.carbackend.persistence.UserRepository;
 import learn.carbackend.security.jwt.JwtUtils;
 import learn.carbackend.security.request.LoginRequest;
 import learn.carbackend.security.request.SignupRequest;
-//import learn.carbackend.security.response.JwtResponse;
+import learn.carbackend.security.response.JwtResponse;
 import learn.carbackend.security.response.MessageResponse;
-//import learn.carbackend.services.UserDetailsImpl;
+import learn.carbackend.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -64,20 +64,20 @@ public class AuthController {
         //Generate JWT token
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        // UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        // List<String> roles = userDetails.getAuthorities().stream()
-        //                         .map(item -> item.getAuthority())
-        //                         .collect(Collectors.toList());
+        List<String> roles = userDetails.getAuthorities().stream()
+                                .map(item -> item.getAuthority())
+                                .collect(Collectors.toList());
 
-        // return ResponseEntity.ok(new JwtResponse(jwt, 
-        //                         userDetails.getId(),
-        //                         userDetails.getUsername(), 
-        //                         userDetails.getEmail(),
-        //                         roles));
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
-                                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization")
-                                .build();
+        return ResponseEntity.ok(new JwtResponse(jwt, 
+                                userDetails.getId(),
+                                userDetails.getUsername(), 
+                                userDetails.getEmail(),
+                                roles));
+        // return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+        //                         .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization")
+        //                         .build();
     }
 
     @PostMapping("/signup")

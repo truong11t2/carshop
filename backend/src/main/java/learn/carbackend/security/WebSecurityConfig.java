@@ -86,7 +86,7 @@ public class WebSecurityConfig {
         .antMatchers("/api/all/**").permitAll()
         .antMatchers("/api/user/**").hasAnyRole("ADMIN", "USER", "MODERATOR")
         .antMatchers("/api/mod/**").hasRole("MODERATOR")
-        .antMatchers("/api/**").hasRole("ADMIN")
+        .antMatchers("/api/**").hasAnyRole("ADMIN", "USER", "MODERATOR")
         
         .anyRequest().authenticated();
 
