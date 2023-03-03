@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { SERVER_URL } from "../constants";
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
-import { IconButton, Snackbar, Stack } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Stack } from "@mui/material";
 import AddCar from "./AddCar";
 import EditCar from "./EditCar";
 import { gridClasses } from "@mui/system";
+import AuthContext from "../AuthContext";
 
-function Carlist() {
-    const [open, setOpen] = useState(false);
+function CarlistModerator() {
+    const authContext = React.useContext(AuthContext);
+    console.log(authContext);
 
     const [cars, setCars] = useState([]);
 
@@ -24,40 +25,8 @@ function Carlist() {
             sortable: false,
             filterable: false,
             renderCell: row => <EditCar data={row} updateCar={updateCar}/>
-        },
-        {
-            field: '_links.self.href',
-            headerName: '',
-            sortable: false,
-            filterable: false,
-            renderCell: row => 
-            /*<button
-                onClick={() => onDelClick(row.id)}>Delete
-            </button>*/
-            <IconButton onClick={() => onDelClick(row.id)}>
-                <DeleteIcon color="error"/>
-            </IconButton>
         }
     ];
-
-    const onDelClick = (url) => {
-        if(window.confirm("Are your sure to delete?")) {
-            fetch(url,
-            {
-                method: 'DELETE',
-                headers: {'Authorization' : token}
-            })
-            .then(response => {
-                if(response.ok) {
-                    fetchCars();
-                    setOpen(true);
-                } else {
-                    alert('Something went wrong!');
-                }
-        })
-        .catch(err => console.error(err))
-        }
-    }
 
     const token = sessionStorage.getItem("jwt");
     
@@ -127,6 +96,7 @@ function Carlist() {
 
     return(
         <React.Fragment>
+            {/*Enable if the role are ADMIN or MODERATOR*/}
             <Stack mt={2} mb={2}>
                 <AddCar addCar={addCar} />
             </Stack>
@@ -137,15 +107,9 @@ function Carlist() {
                 getRowId={row => row._links.self.href}
                 components={{ Toolbar: CustomToolbar }}
             />
-            <Snackbar
-                open={open}
-                autoHideDuration={2000}
-                onClose={() => setOpen(false)}
-                message="Car deleted"
-            />
             </div>
         </React.Fragment>
     );
 }
 
-export default Carlist;
+export default CarlistModerator;
