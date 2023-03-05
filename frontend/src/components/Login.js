@@ -68,7 +68,7 @@ function Login() {
 
     } else {
         return(
-            <div>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
                 <Stack spacing={2} alignItems='center' mt={2} width={400}>
                     <TextField name="username" label="Username" onChange={handleChange} />
                     <TextField name="password" label="Password" onChange={handleChange} />
