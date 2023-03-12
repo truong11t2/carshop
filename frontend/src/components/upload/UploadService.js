@@ -1,19 +1,25 @@
 import HttpCommon from "./HttpCommon";
 
-const upload = (file, onUploadProgress) => {
+const upload = (file, onUploadProgress, token) => {
     let formData = new FormData();
 
     formData.append("file", file);
     return HttpCommon.post("/upload", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
+            "Authorization": token
         },
         onUploadProgress,
     });
 };
 
-const getFiles = () => {
-    return HttpCommon.get("/files");
+const getFiles = (token) => {
+    return HttpCommon.get("/files",
+    {
+        headers: {
+            "Authorization": token
+        },
+    });
 };
 
 const UploadService = {upload, getFiles,};

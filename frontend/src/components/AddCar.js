@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
+import UploadFile from "./upload/UploadFile";
 
 function AddCar(props) {
     const [open, setOpen] = useState(false);
@@ -10,7 +11,8 @@ function AddCar(props) {
         color: '',
         year: '',
         fuel: '',
-        price: ''
+        price: '',
+        image: [],
     });
 
     //Open the modal form
@@ -51,13 +53,28 @@ function AddCar(props) {
                         <TextField label="Color" name="color" autoFocus variant="standard" value={car.color} onChange={handleChange}/>
                         <TextField label="Year" name="year" autoFocus variant="standard" value={car.year} onChange={handleChange}/>
                         <TextField label="Price" name="price" autoFocus variant="standard" value={car.price} onChange={handleChange}/>
+                        <div>
+                            {/*Calling upload function */}
+                            <UploadFile />
+                        </div>
+                        {/* <label className="btn btn-default">
+                            <input type="file" onChange={selectFile} />
+                        </label>
+
+                        <button
+                            className="btn btn-success"
+                            disabled={!selectedFiles}
+                            onClick={<UploadFile selectedFiles={selectedFiles}/>}
+                        >
+                            Upload
+                        </button> */}
                     </Stack>
                 </DialogContent>
                 <DialogActions>
                     {/*<button onClick={handleClose}>Cancel</button>
                     <button onClick={handleSave}>Save</button>*/}
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
+                    <Button variant="contained" onClick={handleClose}>Cancel</Button>
+                    <Button variant="contained" onClick={handleSave}>Save</Button>
                 </DialogActions>
             </Dialog>
         </div>

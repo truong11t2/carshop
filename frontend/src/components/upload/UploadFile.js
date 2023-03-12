@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import UploadService from "./UploadService";
 
 const UploadFile = () => {
@@ -7,6 +8,8 @@ const UploadFile = () => {
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState("");
     const [fileInfo, setFileInfo] = useState([]);
+
+    const token = sessionStorage.getItem("jwt");
 
     useEffect(() => {
         UploadService.getFiles().then(response => setFileInfo(response.data))
@@ -22,10 +25,10 @@ const UploadFile = () => {
 
         UploadService.upload(currentFile, (event) => {
             setProgress(Math.round((100 * event.loaded) / event.total));
-        })
+        }, token)
         .then((response) => {
             setMessage(response.data.message);
-            return UploadService.getFiles();
+            return UploadService.getFiles(token);
         })
         .then(files => setFileInfo(files.data))
         .catch(() => {
@@ -81,7 +84,7 @@ const UploadFile = () => {
                 </ul>
             </div>
         </div>
-    )
+    );
 };
 
 export default UploadFile;
