@@ -71,7 +71,7 @@ function Login() {
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <Stack spacing={2} alignItems='center' mt={2} width={400}>
                     <TextField name="username" label="Username" onChange={handleChange} />
-                    <TextField name="password" label="Password" onChange={handleChange} />
+                    <TextField name="password" label="Password" type="password" autoComplete="current-password" onChange={handleChange} />
                     <Button variant="outlined" color="primary" onClick={login}>Login</Button>
                 </Stack>
                 <Snackbar open={open} autoHideDuration={3000} onClose={() => setOpen(false)}

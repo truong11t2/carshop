@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import UploadFile from "./upload/UploadFile";
 
@@ -11,8 +11,7 @@ function AddCar(props) {
         color: '',
         year: '',
         fuel: '',
-        price: '',
-        image: [],
+        price: ''
     });
 
     //Open the modal form
@@ -53,10 +52,11 @@ function AddCar(props) {
                         <TextField label="Color" name="color" autoFocus variant="standard" value={car.color} onChange={handleChange}/>
                         <TextField label="Year" name="year" autoFocus variant="standard" value={car.year} onChange={handleChange}/>
                         <TextField label="Price" name="price" autoFocus variant="standard" value={car.price} onChange={handleChange}/>
-                        <div>
-                            {/*Calling upload function */}
-                            <UploadFile />
-                        </div>
+                        {/*Adding some space */}
+                        <p></p>
+                        <Divider textAlign="center">Images</Divider>
+                        {/*Calling upload function */}
+                        <UploadFile />
                         {/* <label className="btn btn-default">
                             <input type="file" onChange={selectFile} />
                         </label>
