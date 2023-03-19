@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "owner",
-	indexes = {@Index(name = "owner_unique_idx", unique = true, columnList = "firstname")})
+	indexes = {@Index(name = "owner_unique_idx", unique = false, columnList = "firstname")})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class OwnerEntity {
 

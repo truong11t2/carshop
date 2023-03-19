@@ -1,5 +1,8 @@
 package learn.carbackend.persistence;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,12 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import learn.carbackend.upload.model.FileDBEntity;
 
 @Entity
 @Table(name = "car",
-	indexes = {@Index(name = "car_unique_idx", unique = true, columnList = "brand")})
+	indexes = {@Index(name = "car_unique_idx", unique = false, columnList = "brand")})
 public class CarEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +40,14 @@ public class CarEntity {
 	public void setOwner(OwnerEntity owner) {
 		this.owner = owner;
 	}
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "car_image",
+			joinColumns = @JoinColumn(name = "car_id"),
+			inverseJoinColumns = @JoinColumn(name = "image_id"))
+	private Set<FileDBEntity> images = new HashSet<>();
 	
-	public CarEntity(String brand, String model, String color, String number, int year, int price, OwnerEntity owner) {
+	public CarEntity(String brand, String model, String color, String number, int year, int price, Set<FileDBEntity> images) {
 		super();
 		this.brand = brand;
 		this.model = model;
@@ -42,7 +55,7 @@ public class CarEntity {
 		this.number = number;
 		this.year1 = year;
 		this.price = price;
-		this.owner = owner;
+		this.images = images;
 	}
 	public CarEntity() {}
 	
@@ -88,4 +101,12 @@ public class CarEntity {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
+	public Set<FileDBEntity> getImages() {
+		return images;
+	}
+
+	public void setImageUuids(Set<FileDBEntity> images) {
+		this.images = images;
+	}	
 }
