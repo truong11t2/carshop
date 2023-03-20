@@ -63,13 +63,25 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-    @GetMapping(value = "/file/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
+    @GetMapping(value = "/file/download/{id}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
         FileDBEntity fileDBEntity = storageService.getFile(id);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDBEntity.getName() + "\"")
                 .body(fileDBEntity.getData());
+    }
+
+    @GetMapping(value = "/file/{id}")
+    public ResponseEntity<ResponseFile> getFile(@PathVariable String id) {
+        FileDBEntity file = storageService.getFile(id);
+        String fileDownloadUri = ServletUriComponentsBuilder
+        .fromCurrentContextPath()
+        .path("/file/download/")
+        .path(file.getId())
+        .toUriString();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseFile(file.getName(), fileDownloadUri, file.getType(), file.getData().length));
     }
 
     @DeleteMapping(value = "/file/{id}")

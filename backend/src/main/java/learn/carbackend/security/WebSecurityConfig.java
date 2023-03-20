@@ -82,6 +82,7 @@ public class WebSecurityConfig {
         .authorizeRequests()
         .antMatchers("/auth/signup/**").permitAll()
         .antMatchers("/auth/signin/**").permitAll()
+        .antMatchers("/file/**").permitAll()
 
         .antMatchers("/api/all/**").permitAll()
         .antMatchers("/api/user/**").hasAnyRole("ADMIN", "USER", "MODERATOR")
