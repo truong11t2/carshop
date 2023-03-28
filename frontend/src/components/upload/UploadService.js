@@ -22,6 +22,24 @@ const getFiles = (token) => {
     });
 };
 
-const UploadService = {upload, getFiles,};
+const getFile = (token, uuid) => {
+    return HttpCommon.get("/file/" + uuid,
+    {
+        headers: {
+            "Authorization": token
+        },
+    });
+};
+
+const deleteFile = (token, uuid) => {
+    return HttpCommon.delete("/file/" + uuid,
+    {
+        headers: {
+            "Authorization": token
+        },
+    });
+};
+
+const UploadService = {upload, getFiles, getFile, deleteFile};
 
 export default UploadService;

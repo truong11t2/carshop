@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import UploadFile from "./upload/UploadFile";
+import UploadService from "./upload/UploadService";
 
 function AddCar(props) {
     const [open, setOpen] = useState(false);
@@ -14,6 +15,9 @@ function AddCar(props) {
         price: ''
     });
 
+    const [fileInfo, setFileInfo] = useState([]);
+    const token = sessionStorage.getItem("jwt");
+
     //Open the modal form
     const handleClickOpen = () => {
         setOpen(true);
@@ -21,11 +25,25 @@ function AddCar(props) {
 
     //Close modal form
     const handleClose = () => {
+        remove();
         setOpen(false);
     };
 
     const handleChange = (event) => {
         setCar({...car, [event.target.name]: event.target.value});
+    };
+
+    const remove = () => {
+        fileInfo &&
+            fileInfo.map((file, index) => {
+                //find the position of uuid. It follow 'download/' string. Search for 'd' character
+                //then add the length of 'download/' string to get the position of uuid
+                let pos = file.url.indexOf('download/') + 9;
+                //Get uuid from link
+                let uuid = file.url.substring(pos, file.url.length);
+                return UploadService.deleteFile(token, uuid);
+            });
+            //todo: Remove file from list file
     };
 
     //Save car and close modal form
@@ -56,7 +74,7 @@ function AddCar(props) {
                         <p></p>
                         <Divider textAlign="center">Images</Divider>
                         {/*Calling upload function */}
-                        <UploadFile />
+                        <UploadFile fileInfo={fileInfo} setFileInfo={setFileInfo} remove={remove}/>
                         {/* <label className="btn btn-default">
                             <input type="file" onChange={selectFile} />
                         </label>
