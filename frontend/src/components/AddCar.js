@@ -10,12 +10,13 @@ function AddCar(props) {
         brand: '',
         model: '',
         color: '',
-        year: '',
-        fuel: '',
-        price: ''
+        year1: '',
+        price: '',
+        imageUuids: [],
     });
 
     const [fileInfo, setFileInfo] = useState([]);
+    let uuids = [];
     const token = sessionStorage.getItem("jwt");
 
     //Open the modal form
@@ -25,9 +26,13 @@ function AddCar(props) {
 
     //Close modal form
     const handleClose = () => {
-        remove();
         setOpen(false);
     };
+
+    const handleCancel = () => {
+        remove();
+        handleClose();
+    }
 
     const handleChange = (event) => {
         setCar({...car, [event.target.name]: event.target.value});
@@ -44,11 +49,28 @@ function AddCar(props) {
                 return UploadService.deleteFile(token, uuid);
             });
             //todo: Remove file from list file
+            
+    };
+
+    const getUuids = () => {
+        fileInfo &&
+            fileInfo.map((file, index) => {
+                //find the position of uuid. It follow 'download/' string. Search for 'd' character
+                //then add the length of 'download/' string to get the position of uuid
+                let pos = file.url.indexOf('download/') + 9;
+                //Get uuid from link
+                let uuid = file.url.substring(pos, file.url.length);
+                return uuids.push(uuid);
+        })
     };
 
     //Save car and close modal form
     const handleSave = () => {
-        props.addCar(car);
+        //Add file uuid here
+        getUuids();
+        let newCar = car;
+        newCar.imageUuids = uuids;
+        props.addCar(newCar);
         handleClose();
     }
 
@@ -68,7 +90,7 @@ function AddCar(props) {
                         <TextField label="Brand" name="brand" autoFocus variant="standard" value={car.branch} onChange={handleChange}/>
                         <TextField label="Model" name="model" autoFocus variant="standard" value={car.model} onChange={handleChange}/>
                         <TextField label="Color" name="color" autoFocus variant="standard" value={car.color} onChange={handleChange}/>
-                        <TextField label="Year" name="year" autoFocus variant="standard" value={car.year} onChange={handleChange}/>
+                        <TextField label="Year" name="year1" autoFocus variant="standard" value={car.year1} onChange={handleChange}/>
                         <TextField label="Price" name="price" autoFocus variant="standard" value={car.price} onChange={handleChange}/>
                         {/*Adding some space */}
                         <p></p>
@@ -91,7 +113,7 @@ function AddCar(props) {
                 <DialogActions>
                     {/*<button onClick={handleClose}>Cancel</button>
                     <button onClick={handleSave}>Save</button>*/}
-                    <Button variant="contained" onClick={handleClose}>Cancel</Button>
+                    <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                     <Button variant="contained" onClick={handleSave}>Save</Button>
                 </DialogActions>
             </Dialog>
