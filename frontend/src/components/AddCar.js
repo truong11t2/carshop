@@ -48,8 +48,8 @@ function AddCar(props) {
                 let uuid = file.url.substring(pos, file.url.length);
                 return UploadService.deleteFile(token, uuid);
             });
-            //todo: Remove file from list file
-            
+            //Clear content of the uploaded list file
+            fileInfo.splice(0,fileInfo.length);            
     };
 
     const getUuids = () => {

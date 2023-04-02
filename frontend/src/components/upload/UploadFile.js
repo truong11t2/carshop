@@ -7,6 +7,7 @@ const UploadFile = (props) => {
     const [currentFile, setCurrentFile] = useState(undefined);
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState("");
+    const [count, setCount] = useState(0);
     
 
     const token = sessionStorage.getItem("jwt");
@@ -17,8 +18,20 @@ const UploadFile = (props) => {
 
     const selectFile = (event) => setSelectedFiles(event.target.files);
 
-    const remove = () => {
-        props.remove();
+    const remove = (index) => {
+        console.log(index);
+        let file = props.fileInfo[index];
+        //find the position of uuid. It follow 'download/' string. Search for 'd' character
+        //then add the length of 'download/' string to get the position of uuid
+        let pos = file.url.indexOf('download/') + 9;
+        //Get uuid from link
+        let uuid = file.url.substring(pos, file.url.length);
+        UploadService.deleteFile(token, uuid);
+        //Remove file at current index of the uploaded list file
+        props.fileInfo.splice(index,1)
+        //let listFile = props.fileInfo;
+        //props.setFileInfo(listFile);
+        setCount(count-1);
     };
 
     const upload = () => {
@@ -45,6 +58,7 @@ const UploadFile = (props) => {
             setCurrentFile(undefined);
         });
         setSelectedFiles(undefined);
+        setCount(count+1);
     };
 
     return (
@@ -91,7 +105,7 @@ const UploadFile = (props) => {
                             align="center"
                             className="btn btn-success"
                             // todo: replace by delete icon disabled={selectedRemove}
-                            onClick={remove}
+                            onClick={() => remove(index)}
                         >
                             Remove
                         </button>
