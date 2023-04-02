@@ -26,6 +26,15 @@ function AddCar(props) {
 
     //Close modal form
     const handleClose = () => {
+        //Clear form
+        setCar({brand: '',
+        model: '',
+        color: '',
+        year1: '',
+        price: '',
+        imageUuids: [],});
+        setFileInfo([]);
+        
         setOpen(false);
     };
 

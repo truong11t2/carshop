@@ -49,7 +49,7 @@ function CarlistModerator() {
 
     //Add a new car
     const addCar = (car) => {
-        fetch(SERVER_URL + 'api/cars',
+        fetch(SERVER_URL + 'api/addCar',
         {
             method: 'POST',
             headers: { 'Content-Type':'application/json',
