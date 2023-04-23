@@ -21,9 +21,12 @@ function CarlistUser() {
         {field: 'price', headerName: 'Price', width: 150}
     ];
 
-    const token = sessionStorage.getItem("jwt");
+    //const token = sessionStorage.getItem("jwt");
     
     const fetchCars = () => {
+        //Read the token from the session storage
+        //and include it to Authorization header
+        const token = sessionStorage.getItem("jwt");
         fetch(SERVER_URL + 'api/cars', {
             headers: {'Authorization' : token}
         })
@@ -34,7 +37,7 @@ function CarlistUser() {
 
     useEffect(() => {
         fetchCars();
-    });
+    }, []);
 
 
     //Add CSV export function
